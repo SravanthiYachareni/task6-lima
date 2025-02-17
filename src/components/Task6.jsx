@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import './task6.css'
 import { MdModeEdit } from "react-icons/md";
 import { MdOutlineDeleteOutline } from "react-icons/md";
+import { IoIosSearch } from "react-icons/io";
 
 
 function Task6() {
@@ -75,6 +76,23 @@ function Task6() {
         const updateRow = list.filter((item) => item.id !== id)
         setList(updateRow)
     }
+    const [search, setSearch] = useState('')
+
+    // Filter employees based on search query
+    const filteredEmployees = list.filter((employee) => {
+        const searchBtn = search.toLowerCase();
+        return (
+            employee.empId.toString().toLowerCase().includes(searchBtn) ||
+            employee.firstname.toString().toLowerCase().includes(searchBtn) ||
+            employee.lastname.toString().toLowerCase().includes(searchBtn) ||
+            employee.email.toString().toLowerCase().includes(searchBtn) ||
+            employee.gender.toString().toLowerCase().includes(searchBtn) ||
+            employee.role.toString().toLowerCase().includes(searchBtn)
+        );
+    });
+
+    console.log(search)
+    console.log(list)
 
     return (
 
@@ -90,19 +108,24 @@ function Task6() {
                             {isVisisble &&
                                 <div>
                                     <div className='form-container'>
-                                        <input type='text' placeholder='Id' name='empId'
+                                        <input type='text' placeholder='Id' name='empId' required
                                             value={employee.empId} onChange={handleChange} />
-                                        <input type='text' placeholder='First Name' name='firstname'
+
+                                        <input type='text' placeholder='First Name' name='firstname' required 
                                             value={employee.firstname} onChange={handleChange} />
-                                        <input type='text' placeholder='Last Name' name='lastname'
+
+                                        <input type='text' placeholder='Last Name' name='lastname' required
                                             value={employee.lastname} onChange={handleChange} />
-                                        <input type='text' placeholder='Email' name='email'
+                                            
+                                        <input type='text' placeholder='Email' name='email' required
                                             value={employee.email} onChange={handleChange} />
-                                        <select name='gender' onChange={handleChange}
-                                            value={employee.gender} style={{ paddingLeft: '8px' }}>
-                                            <option>Male</option>
+
+                                        <select name='gender' onChange={handleChange} value={employee.gender} required
+                                             style={{ paddingLeft: '8px' ,width:'304px'}}>
+                                                <option   defaultValue=''>Gender</option>
+                                            <option >Male</option>
                                             <option>Female</option>
-                                            <option>Others</option>
+                                            <option >Others</option>
                                         </select>
                                         <input type='text' placeholder='Role' name='role'
                                             value={employee.role} onChange={handleChange} />
@@ -147,7 +170,8 @@ function Task6() {
                                                         <input type='text' placeholder='Experience' name='experience' />
 
                                                         <select name='notice' onChange={(e) => { handleExperienceChange(i, e) }}
-                                                            style={{ paddingLeft: '8px' }}>
+                                                            style={{ paddingLeft: '8px',width:'304px' }}>
+                                                                <option defaultValue=''>Notice Period</option>
                                                             <option>Immediately</option>
                                                             <option>7 Days</option>
                                                             <option>30 Days</option>
@@ -184,7 +208,7 @@ function Task6() {
                 <div >
                     <table id='emp-table'>
                         <tr>
-                            <th>Emp Id</th>
+                            <th>Emp Id </th>
                             <th>First Name</th>
                             <th>Last Name</th>
                             <th>Email</th>
@@ -193,27 +217,60 @@ function Task6() {
                             <th>Action</th>
                         </tr>
                         <tbody>
-                            {list.map((item, i) => {
-                                return (
-                                    <tr key={i}>
-                                        <td>{item.empId}</td>
-                                        <td>{item.firstname}</td>
-                                        <td>{item.lastname}</td>
-                                        <td>{item.email}</td>
-                                        <td>{item.gender}</td>
-                                        <td>{item.role}</td>
-                                        <td > <button id='edit'
-                                            onClick={() => { handleEdit(item) }}><MdModeEdit
-                                                style={{ width: '250%' }} />
-                                        </button>
-                                            <button id='edit1' onClick={() => { handleDelete1(item.id) }}>
-                                                <img style={{ width: '9px' }}
-                                                    src='https://cdn-icons-png.flaticon.com/512/1214/1214428.png' alt='delete' />
+                            <tr>
+                                <td className='search'>
+                                    <input className='search'
+                                        type="text"
+                                        value={search.empId} placeholder='search'
+                                        onChange={(e) => setSearch(e.target.value)} />
+                                </td>
+                                <td className='search'>
+                                    <input type='text' value={search.firstname}
+                                        placeholder='search'
+                                        onChange={(e) => setSearch(e.target.value)} />
+                                </td>
+                                <td className='search'>
+                                    <input type='text' value={search.lastname} placeholder='search'
+                                        onChange={(e) => setSearch(e.target.value)} />
+                                </td>
+                                <td className='search'>
+                                    <input type='text' value={search.email} placeholder='search'
+                                        onChange={(e) => setSearch(e.target.value)} />
+                                </td>
+                                <td className='search'>
+                                    <input type='text' value={search.gender} placeholder='search'
+                                        onChange={(e) => setSearch(e.target.value)} />
+                                </td>
+                                <td className='search'>
+                                    <input type='text' value={search.role} placeholder='search'
+                                        onChange={(e) => setSearch(e.target.value)} />
+                                </td>
+                            </tr>
+                            {filteredEmployees
+                                .map((item, i) => {
+                                    return (
+                                        <tr key={i}>
+                                            <td>{item.empId}</td>
+                                            <td>{item.firstname}</td>
+                                            <td>{item.lastname}</td>
+                                            <td>{item.email}</td>
+                                            <td>{item.gender}</td>
+                                            <td>{item.role}</td>
+                                            <td > <button id='edit'
+                                                onClick={() => { handleEdit(item) }}><MdModeEdit
+                                                    style={{ width: '250%' }} />
                                             </button>
-                                        </td>
-                                    </tr>
-                                )
-                            })}
+                                                <button id='edit1' onClick={() => { handleDelete1(item.id) }}>
+                                                    <img style={{ width: '9px' }}
+                                                        src='https://cdn-icons-png.flaticon.com/512/1214/1214428.png' alt='delete' />
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    )
+                                    
+                                })}
+                                
+                               
                         </tbody>
                     </table>
                 </div>
