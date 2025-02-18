@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import './task6.css'
 import { MdModeEdit } from "react-icons/md";
-import { MdOutlineDeleteOutline } from "react-icons/md";
 import { IoIosSearch } from "react-icons/io";
+import { MdOutlineDelete } from "react-icons/md";
+
 
 
 function Task6() {
@@ -19,6 +20,14 @@ function Task6() {
         email: '',
         gender: '',
         role: '',
+    })
+    const [search1, setSearch1] = useState({
+        empId: '',
+        firstname: '',
+        lastname: '',
+        email: '',
+        gender: '',
+        role: ''
     })
     const handleChange = (e) => {
         setEmployee({ ...employee, [e.target.name]: [e.target.value] })
@@ -76,23 +85,40 @@ function Task6() {
         const updateRow = list.filter((item) => item.id !== id)
         setList(updateRow)
     }
+
     const [search, setSearch] = useState('')
 
-    // Filter employees based on search query
-    const filteredEmployees = list.filter((employee) => {
-        const searchBtn = search.toLowerCase();
-        return (
-            employee.empId.toString().toLowerCase().includes(searchBtn) ||
-            employee.firstname.toString().toLowerCase().includes(searchBtn) ||
-            employee.lastname.toString().toLowerCase().includes(searchBtn) ||
-            employee.email.toString().toLowerCase().includes(searchBtn) ||
-            employee.gender.toString().toLowerCase().includes(searchBtn) ||
-            employee.role.toString().toLowerCase().includes(searchBtn)
-        );
-    });
+
+    // const filteredEmployees = list.filter((employee) => {
+    //     const searchBtn = search.toLowerCase();
+    //     return (
+    //         employee.empId.toString().toLowerCase().includes(searchBtn) ||
+    //         employee.firstname.toString().toLowerCase().includes(searchBtn) ||
+    //         employee.lastname.toString().toLowerCase().includes(searchBtn) ||
+    //         employee.email.toString().toLowerCase().includes(searchBtn) ||
+    //         employee.gender.toString().toLowerCase().includes(searchBtn) ||
+    //         employee.role.toString().toLowerCase().includes(searchBtn)
+    //     );
+    // });
 
     console.log(search)
-    console.log(list)
+    const handleSearch = (e, name) => {
+        setSearch1({ ...search1, [name]: e.target.value })
+
+    }
+    console.log(search1)
+    const searchColumn = (search1.empId || search1.firstname || search1.lastname || search1.email
+        || search1.gender || search1.role)
+     ?
+        list.filter((item) =>
+            Object.keys(search1).filter(
+                (key) => item[key].toString().toLowerCase().includes(search1[key].toLowerCase())
+            ).length === Object.keys(search1).length
+        ):list
+    // const searchColumn = list.filter((item)=>Object.keys(search1).filter(
+    //     (key) => item[key].toString().toLowerCase().includes(search1[key].toLowerCase())
+    // ))
+
 
     return (
 
@@ -111,23 +137,23 @@ function Task6() {
                                         <input type='text' placeholder='Id' name='empId' required
                                             value={employee.empId} onChange={handleChange} />
 
-                                        <input type='text' placeholder='First Name' name='firstname' required 
+                                        <input type='text' placeholder='First Name' name='firstname' required
                                             value={employee.firstname} onChange={handleChange} />
 
                                         <input type='text' placeholder='Last Name' name='lastname' required
                                             value={employee.lastname} onChange={handleChange} />
-                                            
+
                                         <input type='text' placeholder='Email' name='email' required
                                             value={employee.email} onChange={handleChange} />
 
                                         <select name='gender' onChange={handleChange} value={employee.gender} required
-                                             style={{ paddingLeft: '8px' ,width:'304px'}}>
-                                                <option   defaultValue=''>Gender</option>
+                                            style={{ paddingLeft: '8px', width: '304px' }}>
+                                            <option defaultValue=''>Gender</option>
                                             <option >Male</option>
                                             <option>Female</option>
                                             <option >Others</option>
                                         </select>
-                                        <input type='text' placeholder='Role' name='role'
+                                        <input type='text' placeholder='Role' name='role' required
                                             value={employee.role} onChange={handleChange} />
                                     </div>
                                 </div>
@@ -163,15 +189,15 @@ function Task6() {
                                                         </span>
                                                     </div>
                                                     <div className='form-container1'>
-                                                        <input type='text' placeholder='Company' name='company'
+                                                        <input type='text' placeholder='Company' name='company' required
                                                             value={emp.company} onChange={(e) => { handleExperienceChange(i, e) }} />
-                                                        <input type='text' placeholder='Role' name='role1'
+                                                        <input type='text' placeholder='Role' name='role1' required
                                                             value={emp.role1} onChange={(e) => { handleExperienceChange(i, e) }} />
                                                         <input type='text' placeholder='Experience' name='experience' />
 
-                                                        <select name='notice' onChange={(e) => { handleExperienceChange(i, e) }}
-                                                            style={{ paddingLeft: '8px',width:'304px' }}>
-                                                                <option defaultValue=''>Notice Period</option>
+                                                        <select name='notice' onChange={(e) => { handleExperienceChange(i, e) }} required
+                                                            style={{ paddingLeft: '8px', width: '304px' }}>
+                                                            <option defaultValue=''>Notice Period</option>
                                                             <option>Immediately</option>
                                                             <option>7 Days</option>
                                                             <option>30 Days</option>
@@ -180,12 +206,12 @@ function Task6() {
                                                         </select>
 
                                                         <input type='text' name='startDate' value={emp.startDate}
-                                                            onChange={(e) => { handleExperienceChange(i, e) }}
+                                                            onChange={(e) => { handleExperienceChange(i, e) }} required
                                                             onFocus={(e) => { e.target.type = 'date' }}
                                                             onBlur={(e) => { e.target.type = 'text' }}
                                                             placeholder='Start Date' />
 
-                                                        <input type='text' name='endDate' value={emp.endDate}
+                                                        <input type='text' name='endDate' value={emp.endDate} required
                                                             onChange={(e) => { handleExperienceChange(i, e) }}
                                                             onFocus={(e) => { e.target.type = 'date' }}
                                                             onBlur={(e) => { e.target.type = 'text' }}
@@ -205,6 +231,10 @@ function Task6() {
                     </form>
 
                 </div>
+                {/* <div className='globalsearch'>
+                    <input type='text' placeholder='search..' onChange={(e) => setSearch(e.target.value)} />
+
+                </div> */}
                 <div >
                     <table id='emp-table'>
                         <tr>
@@ -220,33 +250,33 @@ function Task6() {
                             <tr>
                                 <td className='search'>
                                     <input className='search'
-                                        type="text"
-                                        value={search.empId} placeholder='search'
-                                        onChange={(e) => setSearch(e.target.value)} />
-                                </td>
-                                <td className='search'>
-                                    <input type='text' value={search.firstname}
+                                        type="text"  value={search1.empId}
                                         placeholder='search'
-                                        onChange={(e) => setSearch(e.target.value)} />
+                                        onChange={(e) => handleSearch(e, "empId")} />
                                 </td>
                                 <td className='search'>
-                                    <input type='text' value={search.lastname} placeholder='search'
-                                        onChange={(e) => setSearch(e.target.value)} />
+                                    <input type='text' value={search1.firstname}
+                                        placeholder='search'
+                                        onChange={(e) => handleSearch(e, "firstname")} />
                                 </td>
                                 <td className='search'>
-                                    <input type='text' value={search.email} placeholder='search'
-                                        onChange={(e) => setSearch(e.target.value)} />
+                                    <input type='text' value={search1.lastname} placeholder='search'
+                                        onChange={(e) => handleSearch(e, "lastname")} />
                                 </td>
                                 <td className='search'>
-                                    <input type='text' value={search.gender} placeholder='search'
-                                        onChange={(e) => setSearch(e.target.value)} />
+                                    <input type='text' value={search1.email} placeholder='search'
+                                        onChange={(e) => handleSearch(e, "email")} />
                                 </td>
                                 <td className='search'>
-                                    <input type='text' value={search.role} placeholder='search'
-                                        onChange={(e) => setSearch(e.target.value)} />
+                                    <input type='text' value={search1.gender} placeholder='search'
+                                        onChange={(e) => handleSearch(e, "gender")} />
+                                </td>
+                                <td className='search'>
+                                    <input type='text' value={search1.role} placeholder='search'
+                                        onChange={(e) => handleSearch(e, "role")} />
                                 </td>
                             </tr>
-                            {filteredEmployees
+                            {searchColumn
                                 .map((item, i) => {
                                     return (
                                         <tr key={i}>
@@ -256,21 +286,19 @@ function Task6() {
                                             <td>{item.email}</td>
                                             <td>{item.gender}</td>
                                             <td>{item.role}</td>
-                                            <td > <button id='edit'
+                                            <td > <span id='edit'
                                                 onClick={() => { handleEdit(item) }}><MdModeEdit
-                                                    style={{ width: '250%' }} />
-                                            </button>
-                                                <button id='edit1' onClick={() => { handleDelete1(item.id) }}>
-                                                    <img style={{ width: '9px' }}
-                                                        src='https://cdn-icons-png.flaticon.com/512/1214/1214428.png' alt='delete' />
-                                                </button>
+                                                    style={{ width: '40%' }} />
+                                            </span>
+                                                <span id='edit1' onClick={() => { handleDelete1(item.id) }}>
+                                                    <MdOutlineDelete style={{ width: '40%', height: '15px' }} />
+
+                                                </span>
                                             </td>
                                         </tr>
                                     )
-                                    
+
                                 })}
-                                
-                               
                         </tbody>
                     </table>
                 </div>
