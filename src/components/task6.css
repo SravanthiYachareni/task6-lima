@@ -164,7 +164,7 @@ height: 17px;
 }
 
 #edit1 {
-    margin-left: 6px;
+    margin-left: -18px;
     width: 19px;
     border: 0px solid red;
     border-radius: 4px;
@@ -173,6 +173,17 @@ height: 17px;
     color: red;
     margin-top: 3px;
 
+}
+#view {
+    margin-left: -4px;
+    width: 19px;
+    border: 0px solid ;
+    border-radius: 4px;
+    cursor: pointer;
+    /* padding-right: -8px; */
+    cursor: pointer;
+    margin-top: 7px;
+  
 }
 
 #btn-submit {

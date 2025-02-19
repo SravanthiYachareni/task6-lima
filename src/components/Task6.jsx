@@ -3,6 +3,7 @@ import './task6.css'
 import { MdModeEdit } from "react-icons/md";
 import { IoIosSearch } from "react-icons/io";
 import { MdOutlineDelete } from "react-icons/md";
+import { GrFormView } from "react-icons/gr";
 
 
 
@@ -12,6 +13,7 @@ function Task6() {
     const [addExperience, setExperiecne] = useState([])
     const [selected, setSelected] = useState(false)
     const [isVisisble, setIsvisisble] = useState(false)
+    const [view, setView] = useState(false)
     const [employee, setEmployee] = useState({
         id: Date.now(),
         empId: '',
@@ -34,6 +36,13 @@ function Task6() {
     }
     const handleSubmit = (e) => {
         e.preventDefault()
+
+
+        if (employee.empId == '' || employee.firstname == '' || employee.lastname == '' || employee.email == '' || employee.gender == '' ||
+            employee.role == '') {
+            alert("Please fill out all fields.");
+            return;
+        }
         if (editId) {
             const updatedList = list.map((item) =>
                 item.id === editId ? { ...employee, id: editId } : item)
@@ -89,6 +98,9 @@ function Task6() {
     const [search, setSearch] = useState('')
 
 
+
+
+    // Global Searching
     // const filteredEmployees = list.filter((employee) => {
     //     const searchBtn = search.toLowerCase();
     //     return (
@@ -107,18 +119,20 @@ function Task6() {
 
     }
     console.log(search1)
+
     const searchColumn = (search1.empId || search1.firstname || search1.lastname || search1.email
-        || search1.gender || search1.role)
-     ?
+        || search1.gender || search1.role) ?
         list.filter((item) =>
             Object.keys(search1).filter(
                 (key) => item[key].toString().toLowerCase().includes(search1[key].toLowerCase())
             ).length === Object.keys(search1).length
-        ):list
+        ) : list
     // const searchColumn = list.filter((item)=>Object.keys(search1).filter(
     //     (key) => item[key].toString().toLowerCase().includes(search1[key].toLowerCase())
     // ))
+        const handleView = (item) => {
 
+        }
 
     return (
 
@@ -129,7 +143,8 @@ function Task6() {
                         <div className='container'>
                             <div className='title'> <h4 >Employee details</h4>
                                 <span className='expand'
-                                    onClick={() => setIsvisisble(!isVisisble)}>{isVisisble ? '-collapse' : '+expand'}</span>
+                                    onClick={() => setIsvisisble(!isVisisble)}>{isVisisble ? '-collapse' : '+expand'}
+                                </span>
                             </div>
                             {isVisisble &&
                                 <div>
@@ -146,8 +161,8 @@ function Task6() {
                                         <input type='text' placeholder='Email' name='email' required
                                             value={employee.email} onChange={handleChange} />
 
-                                        <select name='gender' onChange={handleChange} value={employee.gender} required
-                                            style={{ paddingLeft: '8px', width: '304px' }}>
+                                        <select name='gender' onChange={handleChange} value={employee.gender}
+                                            required style={{ paddingLeft: '8px', width: '304px' }}>
                                             <option defaultValue=''>Gender</option>
                                             <option >Male</option>
                                             <option>Female</option>
@@ -250,7 +265,7 @@ function Task6() {
                             <tr>
                                 <td className='search'>
                                     <input className='search'
-                                        type="text"  value={search1.empId}
+                                        type="text" value={search1.empId}
                                         placeholder='search'
                                         onChange={(e) => handleSearch(e, "empId")} />
                                 </td>
@@ -286,13 +301,16 @@ function Task6() {
                                             <td>{item.email}</td>
                                             <td>{item.gender}</td>
                                             <td>{item.role}</td>
-                                            <td > <span id='edit'
-                                                onClick={() => { handleEdit(item) }}><MdModeEdit
-                                                    style={{ width: '40%' }} />
-                                            </span>
+                                            <td >
+                                                <span id='edit'
+                                                    onClick={() => { handleEdit(item) }}>
+                                                    <MdModeEdit style={{ width: '40%' }} />
+                                                </span>
                                                 <span id='edit1' onClick={() => { handleDelete1(item.id) }}>
                                                     <MdOutlineDelete style={{ width: '40%', height: '15px' }} />
-
+                                                </span>
+                                                <span id='view' onClick={handleView(item)}>
+                                                    <GrFormView style={{ width: '20%', height: '15px' }} />
                                                 </span>
                                             </td>
                                         </tr>
@@ -301,7 +319,9 @@ function Task6() {
                                 })}
                         </tbody>
                     </table>
+
                 </div>
+
             </div>
         </div>
     )
